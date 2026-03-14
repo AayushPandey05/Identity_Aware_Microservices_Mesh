@@ -1,98 +1,81 @@
-🍔 Real-Time Food Delivery Ecosystem (Microservices)
-A high-performance, asynchronous backend architecture built with C++17, leveraging Event-Driven Architecture (EDA) to handle high-concurrency user operations and real-time order processing.
+# 🍔 Real-Time Food Delivery Backend (EDA)
 
-🏗️ System Architecture
-The project implements a decoupled microservices pattern where services communicate via a distributed message broker rather than tight API dependencies.
+A high-performance microservices architecture built with **C++17**, demonstrating
+**Event-Driven Architecture (EDA)** for real-time order processing and user management.
 
-User Service (Producer): Handles user registration, persists data to AWS RDS (MySQL), and publishes USER_CREATED events.
+---
 
-Order Service (Consumer): A reactive worker that listens for Kafka events to trigger business logic (e.g., auto-applying new-user discounts).
+## 🏗️ System Design
 
-Kafka Broker (Aiven Cloud): Acts as the centralized event backbone, ensuring reliable message delivery with SSL/TLS encryption.
+The system utilizes a decoupled producer-consumer pattern to ensure high availability
+and horizontal scalability.
 
-Containerization: Every service is isolated using Docker for consistent deployment across environments.
+- **User Service (Producer)**: High-speed C++ service that persists user credentials
+  to **AWS RDS (MySQL)** and broadcasts a `USER_CREATED` event to Kafka upon successful
+  registration.
+- **Order Service (Consumer)**: A reactive worker that polls the **Aiven Kafka** broker
+  to trigger downstream business logic (e.g., automated discount application) in real-time.
+- **Infrastructure**: Fully containerized using **Docker** to ensure environment parity
+  between local development and cloud deployment.
 
-🛠️ Tech Stack
-Languages: C++17 (Focusing on memory efficiency and low-latency).
+---
 
-Infrastructure: AWS RDS (Relational Database Service), Aiven Kafka (Cloud Broker).
+## 🛠️ Technical Stack
 
-Security: SSL/TLS Certificate Handshaking, Environment Variable Management.
+| Layer | Technology |
+|---|---|
+| Language | C++17 |
+| Database | AWS RDS (MySQL) |
+| Message Broker | Aiven Kafka |
+| DevOps | Docker, Git, Linux |
+| Security | SSL/TLS, `.env` isolation |
 
-DevOps: Docker, Git.
+---
 
-Libraries: librdkafka (Kafka Client), libmariadb (MySQL Client).
+## 🚀 Key Engineering Implementations
 
-🚀 Key Engineering Highlights
-1. Robust Cloud Persistence
-Implemented a database-first approach using AWS RDS. Logic includes:
+1. **Asynchronous Decoupling**: Services communicate via events, preventing cascading
+   failures and reducing system latency.
+2. **Reliable Persistence**: Strict database constraints on AWS RDS to ensure data integrity.
+3. **Encrypted Data Streams**: Full SSL integration for secure communication between
+   C++ containers and remote Kafka clusters.
+4. **Security Standards**: Used `.gitignore` and `.env` patterns to prevent credential
+   leakage in public repositories.
 
-Duplicate entry prevention using UNIQUE constraints.
+---
 
-Secure cloud connectivity from within Dockerized Linux environments.
-
-2. Event-Driven Decoupling
-Shifted from a monolithic design to EDA. The User Service doesn't "know" about the Order Service; it simply broadcasts an event. This allows the system to scale horizontally and remain resilient if one service goes offline.
-
-3. Production-Ready Security
-Secret Management: Sensitive AWS/Kafka credentials are never hardcoded; they are managed via .env files (excluded from version control).
-
-Encrypted Streams: Implemented full SSL encryption for data-in-transit between the C++ containers and the Cloud Kafka cluster.
-
-📂 Project Structure
-Plaintext
+## 📂 Repository Structure
+```text
 ├── foodapp-backend/
-│   ├── user-service/     # C++ Producer Logic & Docker Configuration
-│   ├── order-service/    # C++ Consumer Logic & Event Polling
-│   └── payment-service/  # (In Development)
-├── Doc/                  # Architectural Diagrams & Technical Logs
-├── .gitignore            # Security rules to prevent secret leaking
-└── README.md             # Project Documentation
-🚦 Getting Started
-Prerequisites
-Docker Desktop
+│   ├── user-service/     # Producer Logic & Docker Infrastructure
+│   ├── order-service/    # Consumer/Listener Logic & Kafka Polling
+│   └── payment-service/  # (Pipeline) Logic for transaction handling
+├── Doc/                  # Architectural diagrams & verification logs
+└── .gitignore            # Security rules for credential management
+```
 
-Aiven Kafka SSL Certificates (placed in /certificates)
+---
 
-AWS RDS Instance
+## 🚦 Execution Guide
 
-Local Setup
-Clone the repository:
+### Environment Configuration
+Copy `.env.example` to `.env` and populate your AWS and Kafka credentials.
 
-Bash
-git clone https://github.com/AayushPandey05/Real_Time_Food_Delivery_System.git
-Environment Setup:
-Copy .env.example to .env and provide your specific credentials.
-
-Bash
-cp .env.example .env
-Run with Docker:
-
-Bash
-# Terminal 1: Start the Listener (Order Service)
+### Start the Ecosystem
+```bash
+# Terminal 1: Run Order Listener
 cd foodapp-backend/order-service
-docker build -t order-svc .
-docker run order-svc
+docker build -t order-svc . && docker run order-svc
 
-# Terminal 2: Trigger an Event (User Service)
+# Terminal 2: Trigger User Creation
 cd foodapp-backend/user-service
-docker build -t user-svc .
-docker run user-svc
-📈 Future Roadmap
-[ ] Payment Service: Integration of simulated transaction events.
+docker build -t user-svc . && docker run user-svc
+```
 
-[ ] API Gateway: Implementing Nginx for unified entry points.
+---
 
-[ ] Kubernetes: Orchestrating containers for auto-scaling and self-healing.
+## 📈 Future Roadmap
 
-How to add this to GitHub:
-Open your README.md file in VS Code.
-
-Delete everything inside and paste this.
-
-Save, then run:
-
-PowerShell
-git add README.md
-git commit -m "Docs: Update README with professional industry-standard documentation"
-git push origin main
+- [ ] **API Gateway**: Implementing Nginx for unified request routing.
+- [ ] **Kubernetes**: Orchestrating containers for auto-scaling and self-healing.
+- [ ] **Payment Integration**: Handling simulated financial transaction events.
