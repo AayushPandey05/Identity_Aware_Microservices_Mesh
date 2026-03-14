@@ -1,0 +1,11 @@
+Service URI:
+foodapp-kafka-broker-lpu-e79e.k.aivencloud.com:21836
+
+Host:
+foodapp-kafka-broker-lpu-e79e.k.aivencloud.com
+
+Port:
+21836
+
+RDS PASS:
+76072pandey

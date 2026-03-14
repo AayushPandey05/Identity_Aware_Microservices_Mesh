@@ -1,0 +1,22 @@
+# Security
+certificates/
+*.pem
+*.cert
+*.key
+.env
+.env.example
+
+# Large External Libraries (CRITICAL)
+librdkafka-2.13.2/
+foodapp-backend/user-service/mysql-c-api/
+
+# Compiled Binaries & OS files
+*.exe
+*.dll
+*.o
+*.jpg
+*.pdf
+foodapp-backend/user-service/user_service
+foodapp-backend/order-service/order_service
+.vscode/
+.idea/

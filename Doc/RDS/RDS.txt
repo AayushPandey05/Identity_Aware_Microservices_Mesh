@@ -1,0 +1,5 @@
+DB Instance Identifier: foodapp-db
+
+Master Username: admin
+
+RDS PASS: 76072pandey

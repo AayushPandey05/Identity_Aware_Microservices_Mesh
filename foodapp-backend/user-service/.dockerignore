@@ -1,0 +1,4 @@
+mysql-c-api/
+librdkafka-2.13.2/
+*.exe
+*.dll
