@@ -47,6 +47,8 @@ void send_user_event(const char* username) {
 
     // 5. Flush and Clean up
     rd_kafka_flush(rk, 5000); 
+    cout << "⌛ Waiting for Kafka to confirm delivery..." << endl;
+    rd_kafka_flush(rk, 10000); // Wait for 10 seconds
     rd_kafka_destroy(rk);
     
     cout << "✅ Kafka: Cleanup complete." << endl;
@@ -65,8 +67,8 @@ int main() {
         cout << "✅ Connected to RDS!" << endl;
 
         // NEW DATA (Change this name every time or delete from CloudShell first)
-        string username = "Pratyush_Kafka_Test_01";
-        string email = "kafka_test_01@gmail.com";
+        string username = "Pratyush_Final_Win_77"; 
+        string email = "win_77@gmail.com";
         string pass_hash = "hashed_pw_123"; 
 
         string query = "INSERT INTO users (username, email, password_hash) VALUES ('" + 
