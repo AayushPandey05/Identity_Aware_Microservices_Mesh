@@ -9,7 +9,7 @@ async function handleAuth(event) {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // If it's Sign Up, we use the name field. If Login, we just use a placeholder or skip.
+  // Grab the name if Signing Up, otherwise use a fallback
   const username = isSignUp
     ? document.getElementById("fullName").value
     : email.split("@")[0];
@@ -17,10 +17,9 @@ async function handleAuth(event) {
   if (isSignUp) {
     await registerUser(username, email, password);
   } else {
+    // 🚀 Login logic (Aayush, we can build the C++ /api/login route next!)
     console.log("Login logic will go here next!");
-    alert(
-      "Login logic is coming in the next step, Aayush! Try Sign Up for now.",
-    );
+    alert("Login logic is coming soon, Aayush! Use Sign Up for now.");
   }
 }
 
@@ -35,7 +34,10 @@ async function registerUser(username, email, password) {
     const data = await response.json();
 
     if (response.ok && data.status === "success") {
+      // ✅ Save everything to LocalStorage
       localStorage.setItem("authToken", data.token);
+      localStorage.setItem("foodapp_user", username); // This updates your Navbar!
+
       alert(`Shabaash Aayush! User ${username} registered successfully.`);
       window.location.href = "index.html";
     } else {
@@ -43,6 +45,27 @@ async function registerUser(username, email, password) {
     }
   } catch (error) {
     console.error("Connection Error:", error);
-    alert("checking if ngrok is running!");
+    alert("Bhai Aayush, check if your ngrok tunnel is still active!");
   }
 }
+
+/**
+ * 🛠️ Logout Function
+ */
+function logoutUser() {
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("foodapp_user");
+  alert("Logged out! See you soon, Aayush.");
+  window.location.href = "login.html";
+}
+
+// Ensure the Logout button works if it exists on the page
+document.addEventListener("DOMContentLoaded", () => {
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      logoutUser();
+    });
+  }
+});
