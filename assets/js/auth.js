@@ -2,14 +2,14 @@ let auth0 = null;
 
 // 🛠️ SMART CONFIGURATION: Detects if you're on Localhost or GitHub
 const configureClient = async () => {
-  // This creates the full path (e.g., https://.../Scalable_Food_Delivery_System/)
-  const currentPath = window.location.origin + window.location.pathname;
+  // This detects the current URL automatically (No more hardcoded localhost!)
+  const targetRedirect = window.location.origin + window.location.pathname;
 
   auth0 = await createAuth0Client({
-    domain: "dev-tpfjrh1yyggihvc8.us.auth0.com", // ⬅️ REPLACE with your actual Auth0 Domain
-    client_id: "nPhm2PIW29hUiaK2dHPjtDouPY9FOHtv", // ⬅️ REPLACE with your Auth0 Client ID
+    domain: "dev-tpfjrh1yyggihvc8.us.auth0.com",
+    client_id: "nPhm2PIW29hUiaK2dHPjtDouPY9FOHtv",
     authorizationParams: {
-      redirect_uri: currentPath,
+      redirect_uri: targetRedirect,
     },
   });
 };
