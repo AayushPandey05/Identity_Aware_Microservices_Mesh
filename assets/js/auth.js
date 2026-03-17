@@ -1,3 +1,4 @@
+// REPLACE whatever is there with your new live link
 const BACKEND_URL = "https://synthia-semidivine-therese.ngrok-free.dev";
 
 // --- AUTH LOGIC ---
