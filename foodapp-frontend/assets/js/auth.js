@@ -1,25 +1,24 @@
 const BACKEND_URL = "https://synthia-semidivine-therese.ngrok-free.dev";
 
+// --- AUTH LOGIC ---
+
 async function handleAuth(event) {
   event.preventDefault();
 
+  // Check if we are in Sign Up mode (if the Name field is visible)
   const isSignUp = !document
     .getElementById("group-name")
-    .classList.contains("hidden");
+    ?.classList.contains("hidden");
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // Grab the name if Signing Up, otherwise use a fallback
-  const username = isSignUp
-    ? document.getElementById("fullName").value
-    : email.split("@")[0];
-
   if (isSignUp) {
+    const username = document.getElementById("fullName").value;
+    updateDevMonitor(`Initiating Sign-Up for ${username}...`);
     await registerUser(username, email, password);
   } else {
-    // 🚀 Login logic (Aayush, we can build the C++ /api/login route next!)
-    console.log("Login logic will go here next!");
-    alert("Login logic is coming soon, Aayush! Use Sign Up for now.");
+    updateDevMonitor(`Initiating Login for ${email}...`);
+    await loginUser(email, password);
   }
 }
 
@@ -30,42 +29,66 @@ async function registerUser(username, email, password) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password }),
     });
-
     const data = await response.json();
-
     if (response.ok && data.status === "success") {
-      // ✅ Save everything to LocalStorage
       localStorage.setItem("authToken", data.token);
-      localStorage.setItem("foodapp_user", username); // This updates your Navbar!
-
-      alert(`Shabaash Aayush! User ${username} registered successfully.`);
+      localStorage.setItem("foodapp_user", username);
+      updateDevMonitor("✅ RDS: User Saved | Kafka: Event Produced");
+      alert(`Shabaash Aayush! User ${username} registered.`);
       window.location.href = "index.html";
-    } else {
-      alert("Error: " + (data.message || "User already exists in AWS RDS"));
     }
   } catch (error) {
-    console.error("Connection Error:", error);
-    alert("Bhai Aayush, check if your ngrok tunnel is still active!");
+    updateDevMonitor("❌ Connection Failed!");
   }
 }
 
-/**
- * 🛠️ Logout Function
- */
-function logoutUser() {
-  localStorage.removeItem("authToken");
-  localStorage.removeItem("foodapp_user");
-  alert("Logged out! See you soon, Aayush.");
-  window.location.href = "login.html";
-}
-
-// Ensure the Logout button works if it exists on the page
-document.addEventListener("DOMContentLoaded", () => {
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      logoutUser();
+async function loginUser(email, password) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
+    const data = await response.json();
+    if (response.ok && data.status === "success") {
+      localStorage.setItem("authToken", data.token);
+      localStorage.setItem("foodapp_user", data.username);
+      updateDevMonitor(`✅ Welcome back ${data.username}! JWT Verified.`);
+      window.location.href = "index.html";
+    } else {
+      alert("Invalid credentials!");
+    }
+  } catch (error) {
+    updateDevMonitor("❌ Backend Offline!");
   }
-});
+}
+
+// --- RECRUITER MONITOR LOGIC ---
+
+function updateDevMonitor(event) {
+  const feed = document.getElementById("event-feed");
+  const status = document.getElementById("ngrok-status");
+  if (!feed || !status) return;
+
+  // Check backend health
+  fetch(BACKEND_URL + "/api/register", { method: "OPTIONS" })
+    .then(() => {
+      status.innerText = "CONNECTED";
+      status.style.color = "#00ff00";
+    })
+    .catch(() => {
+      status.innerText = "OFFLINE";
+      status.style.color = "#ff0000";
+    });
+
+  if (event) {
+    const time = new Date().toLocaleTimeString().split(" ")[0];
+    feed.innerHTML = `> ${time}: ${event}<br>` + feed.innerHTML;
+  }
+}
+
+// Auto-check status every 10 seconds
+setInterval(() => updateDevMonitor(), 10000);
+document.addEventListener("DOMContentLoaded", () =>
+  updateDevMonitor("System Ready."),
+);

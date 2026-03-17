@@ -1,215 +1,277 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order food online from India's best food delivery service. Order from restaurants near you</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
-  <script>
-    if (!localStorage.getItem('foodapp_user')) {
-      window.location.href = 'login.html';
-    }
-  </script>
-</head>
-<body>
-  
-  <!-- Swiggy Exact Header -->
-  <header class="global-header">
-    <div class="header-inner">
-      <div class="header-left">
-        <div class="logo-box">
-          <img class="swiggy-logo" src="https://cdn.iconscout.com/icon/free/png-256/free-swiggy-1613371-1369418.png" alt="Swiggy">
-        </div>
-        <div class="location-box">
-          <span class="loc-type">Other</span>
-          <span class="loc-arrow">
-            <svg viewBox="0 0 24 24" fill="none" class="arrow-svg"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" fill="#fc8019"></path></svg>
-          </span>
-        </div>
-      </div>
-      
-      <div class="header-right">
-        <ul class="nav-list">
-          <li class="nav-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="nav-icon"><path d="M21 8H3V6h18v2zm0 4H3v-2h18v2zm0 4H3v-2h18v2z" fill="#3d4152"></path></svg>
-            Swiggy Corporate
-          </li>
-          <li class="nav-item search-item" id="open-search-btn">
-            <svg viewBox="0 0 24 24" class="nav-icon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#3d4152"></path></svg>
-            Search
-          </li>
-          <li class="nav-item offers-item" onclick="document.dispatchEvent(new CustomEvent('nav-home'))">
-            <svg viewBox="0 0 24 24" class="nav-icon"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.36-.36.59-.86.59-1.41s-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7zm11.77 8.27l-7.25-7.25c.19-.34.33-.71.39-1.12l7.57 7.57c.18.18.29.43.29.7 s-.12.52-.3.7c-.18.18-.43.29-.7.29s-.52-.11-.7-.29z" fill="#3d4152"></path></svg>
-            Offers <sup class="superscript">NEW</sup>
-          </li>
-          <li class="nav-item" id="open-signin-modal">
-            <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#3d4152"></path></svg>
-            Sign In
-          </li>
-          <li class="nav-item cart-item" id="open-cart-sidebar">
-            <span class="cart-icon-wrapper">
-              <span class="cart-count">0</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Order food online from India's best food delivery service. Order from
+      restaurants near you
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  </head>
+  <body>
+    <header class="global-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <div class="logo-box">
+            <img
+              class="swiggy-logo"
+              src="https://cdn.iconscout.com/icon/free/png-256/free-swiggy-1613371-1369418.png"
+              alt="Swiggy"
+            />
+          </div>
+          <div class="location-box">
+            <span class="loc-type">Other</span>
+            <span class="loc-arrow">
+              <svg viewBox="0 0 24 24" fill="none" class="arrow-svg">
+                <path
+                  d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  fill="#fc8019"
+                ></path>
+              </svg>
             </span>
-            Cart
-          </li>
-        </ul>
-      </div>
-    </div>
-  </header>
+          </div>
+        </div>
 
-  <!-- Swiggy Main Content (Home Grid) -->
-  <main class="page-container" id="home-view">
-    
-    <!-- "What's on your mind?" Carousel Section -->
-    <section class="mind-section">
-      <div class="section-header">
-        <h2 class="title-h2">What's on your mind?</h2>
-        <div class="nav-arrows">
-          <button class="arrow-btn"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg></button>
-          <button class="arrow-btn"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></button>
+        <div class="header-right">
+          <ul class="nav-list">
+            <li class="nav-item">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                class="nav-icon"
+              >
+                <path
+                  d="M21 8H3V6h18v2zm0 4H3v-2h18v2zm0 4H3v-2h18v2z"
+                  fill="#3d4152"
+                ></path>
+              </svg>
+              Swiggy Corporate
+            </li>
+            <li class="nav-item search-item" id="open-search-btn">
+              <svg viewBox="0 0 24 24" class="nav-icon">
+                <path
+                  d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                  fill="#3d4152"
+                ></path>
+              </svg>
+              Search
+            </li>
+            <li
+              class="nav-item offers-item"
+              onclick="document.dispatchEvent(new CustomEvent('nav-home'))"
+            >
+              <svg viewBox="0 0 24 24" class="nav-icon">
+                <path
+                  d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.36-.36.59-.86.59-1.41s-.23-1.06-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7zm11.77 8.27l-7.25-7.25c.19-.34.33-.71.39-1.12l7.57 7.57c.18.18.29.43.29.7 s-.12.52-.3.7c-.18.18-.43.29-.7.29s-.52-.11-.7-.29z"
+                  fill="#3d4152"
+                ></path>
+              </svg>
+              Offers <sup class="superscript">NEW</sup>
+            </li>
+            <li class="nav-item" id="open-signin-modal">
+              <svg viewBox="0 0 24 24" class="nav-icon">
+                <path
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  fill="#3d4152"
+                ></path>
+              </svg>
+              <span id="user-display-name">Sign In</span>
+            </li>
+            <li class="nav-item cart-item" id="open-cart-sidebar">
+              <span class="cart-icon-wrapper">
+                <span class="cart-count">0</span>
+              </span>
+              Cart
+            </li>
+          </ul>
         </div>
       </div>
-      
-      <div class="mind-carousel" id="dynamic-carousel">
-        <!-- JS Rendering goes here -->
-      </div>
-      
-      <hr class="section-divider">
-    </section>
+    </header>
 
-    <!-- Title and Top Chains Section -->
-    <div class="section-header">
-      <h2 class="title-h2">Top restaurant chains in Phagwara</h2>
-      <div class="nav-arrows">
-        <button class="arrow-btn"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg></button>
-        <button class="arrow-btn"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></button>
-      </div>
-    </div>
-    
-    <!-- Filter Bar - Added id for event delegation -->
-    <div class="filters-container" id="filter-container">
-      <div class="swiggy-pill" data-filter="all">All</div>
-      <div class="swiggy-pill" data-filter="rating">Ratings 4.0+</div>
-      <div class="swiggy-pill" data-filter="veg">Pure Veg</div>
-      <div class="swiggy-pill" data-filter="fast">Fast Delivery</div>
-    </div>
+    <main class="page-container" id="home-view">
+      <section class="mind-section">
+        <div class="section-header">
+          <h2 class="title-h2">What's on your mind?</h2>
+          <div class="nav-arrows">
+            <button class="arrow-btn">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path
+                  d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+                />
+              </svg>
+            </button>
+            <button class="arrow-btn">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path
+                  d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
 
-    <!-- Exact Flat Card Grid -->
-    <div class="swiggy-grid top-chains-grid" id="dynamic-grid">
-      <!-- JS Rendering goes here -->
-    </div>
-  </main>
+        <div class="mind-carousel" id="dynamic-carousel"></div>
 
-  <!-- Restaurant Details View (Hidden by default) -->
-  <main class="page-container hidden" id="restaurant-view">
-    <button class="back-btn" id="back-to-home">← Back to Home</button>
-    <div id="restaurant-info-header">
-      <!-- Dynamic Info Injected Here -->
-    </div>
-    <hr class="section-divider">
-    <div class="menu-list" id="menu-container">
-      <!-- Dynamic Menu Injected Here -->
-    </div>
-  </main>
+        <hr class="section-divider" />
+      </section>
 
-  <!-- Slide-in Modal Overlays -->
-  <div class="modal-backdrop" id="modal-backdrop"></div>
-  
-  <!-- Search Overlay -->
-  <aside class="search-overlay" id="search-overlay">
-    <div class="search-header-box">
-      <div class="search-input-group">
-        <input type="text" id="live-search-input" placeholder="Search for restaurants and food">
-        <svg viewBox="0 0 24 24" class="nav-icon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#3d4152"></path></svg>
-      </div>
-      <button class="close-btn" id="close-search-btn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-    </div>
-    <div class="search-results-grid" id="search-results-grid">
-      <!-- Search Render -->
-    </div>
-  </aside>
-
-  <!-- Cart Sidebar -->
-  <aside class="auth-modal" id="cart-sidebar">
-    <div class="modal-header">
-      <button class="close-btn" id="close-cart-btn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-      <div class="modal-titles">
-        <h2>Your Cart</h2>
-      </div>
-    </div>
-    <div class="cart-items-list" id="cart-items-container">
-      <!-- Cart Render -->
-    </div>
-    <div class="cart-footer hidden" id="cart-footer">
-      <div class="cart-total-row">
-        <span>To Pay</span>
-        <span id="cart-total-price">₹0</span>
-      </div>
-      <button class="submit-btn" id="checkout-btn">CHECKOUT</button>
-    </div>
-    <div class="empty-cart-state" id="empty-cart-state">
-      <img src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/2xempty_cart_yfxml0" alt="Empty Cart">
-      <p>Your cart is empty</p>
-      <p style="font-size: 14px; color: var(--text-secondary);">You can go to home page to view more restaurants</p>
-    </div>
-  </aside>
-
-  <!-- Auth Modal -->
-  <aside class="auth-modal" id="auth-modal">
-    <div class="modal-header">
-      <button class="close-btn" id="close-modal-btn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-      <div class="modal-titles">
-        <h2>Login</h2>
-        <p>or <a href="#" style="color:#fc8019; text-decoration: none;">create an account</a></p>
-      </div>
-      <div class="modal-illustration">
-        <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r" alt="Food icon">
-      </div>
-    </div>
-
-    <!-- Security Verified Badge -->
-    <div class="security-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#11823b" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-      JWT Status: Verified
-    </div>
-
-    <!-- The Phase 4 Registration Form inside Modal -->
-    <form id="registration-form" class="registration-form">
-      <div class="form-group slide-input">
-        <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
+      <div class="section-header">
+        <h2 class="title-h2">Top restaurant chains in Phagwara</h2>
+        <div class="nav-arrows">
+          <button class="arrow-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path
+                d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+              />
+            </svg>
+          </button>
+          <button class="arrow-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path
+                d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <div class="form-group slide-input">
-        <input type="email" id="email" name="email" placeholder="Email Address" required>
+      <div class="filters-container" id="filter-container">
+        <div class="swiggy-pill" data-filter="all">All</div>
+        <div class="swiggy-pill" data-filter="rating">Ratings 4.0+</div>
+        <div class="swiggy-pill" data-filter="veg">Pure Veg</div>
+        <div class="swiggy-pill" data-filter="fast">Fast Delivery</div>
       </div>
 
-      <div class="form-group slide-input">
-        <input type="password" id="password" name="password" placeholder="Password" required>
+      <div class="swiggy-grid top-chains-grid" id="dynamic-grid"></div>
+    </main>
+
+    <main class="page-container hidden" id="restaurant-view">
+      <button class="back-btn" id="back-to-home">← Back to Home</button>
+      <div id="restaurant-info-header"></div>
+      <hr class="section-divider" />
+      <div class="menu-list" id="menu-container"></div>
+    </main>
+
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+
+    <aside class="search-overlay" id="search-overlay">
+      <div class="search-header-box">
+        <div class="search-input-group">
+          <input
+            type="text"
+            id="live-search-input"
+            placeholder="Search for restaurants and food"
+          />
+        </div>
+        <button class="close-btn" id="close-search-btn">×</button>
+      </div>
+      <div class="search-results-grid" id="search-results-grid"></div>
+    </aside>
+
+    <aside class="auth-modal" id="cart-sidebar">
+      <div class="modal-header">
+        <button class="close-btn" id="close-cart-btn">×</button>
+        <div class="modal-titles"><h2>Your Cart</h2></div>
+      </div>
+      <div class="cart-items-list" id="cart-items-container"></div>
+      <div class="cart-footer hidden" id="cart-footer">
+        <div class="cart-total-row">
+          <span>To Pay</span><span id="cart-total-price">₹0</span>
+        </div>
+        <button class="submit-btn" id="checkout-btn">CHECKOUT</button>
+      </div>
+    </aside>
+
+    <aside class="auth-modal" id="auth-modal">
+      <div class="modal-header">
+        <button class="close-btn" id="close-modal-btn">×</button>
+        <div class="modal-titles">
+          <h2>Account Gateway</h2>
+          <p>Login or create an account</p>
+        </div>
+        <div class="modal-illustration">
+          <img
+            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r"
+            alt="Food icon"
+          />
+        </div>
       </div>
 
-      <button type="submit" id="submit-btn" class="submit-btn">
-        <span class="btn-text">SIGN UP</span>
-        <span class="spinner hidden"></span>
-      </button>
+      <div
+        class="security-badge"
+        style="background: #f4f9f4; color: #11823b; padding: 8px; font-size: 11px; margin-bottom: 15px; border-radius: 4px;"
+      >
+        ✅ JWT Status: Secured via HS256
+      </div>
 
-      <p class="terms">By creating an account, I accept the Terms & Conditions & Privacy Policy</p>
-    </form>
-  </aside>
+      <form id="registration-form" onsubmit="handleAuth(event)">
+        <div class="form-group slide-input" id="group-name">
+          <input type="text" id="fullName" placeholder="Full Name" />
+        </div>
+        <div class="form-group slide-input">
+          <input type="email" id="email" placeholder="Email Address" required />
+        </div>
+        <div class="form-group slide-input">
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <button type="submit" id="submit-btn" class="submit-btn">
+          PROCEED
+        </button>
+      </form>
+    </aside>
 
-  <!-- Toast Container -->
-  <div id="toast-container" class="toast-container"></div>
+    <div
+      id="dev-monitor"
+      style="position: fixed; bottom: 20px; right: 20px; width: 280px; background: rgba(0,0,0,0.9); color: #00ff00; font-family: 'Courier New', monospace; padding: 15px; border-radius: 12px; border: 1px solid #333; font-size: 11px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: auto;"
+    >
+      <h4
+        style="margin: 0 0 10px 0; color: #ff9800; border-bottom: 1px solid #333; padding-bottom: 5px;"
+      >
+        🚀 Backend Live Monitor
+      </h4>
+      <div id="status-logs">
+        <div style="margin-bottom: 4px;">
+          📡 Connection:
+          <span id="ngrok-status" style="color: #ff0000;">Checking...</span>
+        </div>
+        <div style="margin-bottom: 4px;">
+          🗄️ Database: <span style="color: #00ff00;">AWS RDS (MySQL)</span>
+        </div>
+        <div style="margin-bottom: 4px;">
+          🧠 Cache: <span style="color: #00ff00;">Redis (Cloud)</span>
+        </div>
+        <div style="margin-bottom: 4px;">
+          📩 Messaging: <span style="color: #00ff00;">Kafka (Aiven)</span>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #333; margin: 10px 0;" />
+        <div
+          id="event-feed"
+          style="height: 50px; overflow: hidden; font-size: 10px; color: #aaa;"
+        >
+          > System Initialized...
+        </div>
+      </div>
+    </div>
 
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/script.js"></script>
-</body>
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/script.js"></script>
+  </body>
 </html>
