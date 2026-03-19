@@ -17,8 +17,7 @@ async function handleAuth(event) {
     updateDevMonitor(`Initiating Sign-Up for ${username}...`);
     await registerUser(username, email, password);
   } else {
-    const username = email.split("@")[0]; // Fallback if name not available
-    updateDevMonitor(`Initiating Login for ${email}...`);
+    // updateDevMonitor(`Initiating Login for ${email}...`);
     await loginUser(email, password);
   }
 }
@@ -35,8 +34,10 @@ async function registerUser(username, email, password) {
       localStorage.setItem("authToken", data.token);
       localStorage.setItem("foodapp_user", username);
       updateDevMonitor("✅ RDS: User Saved | Kafka: Event Produced");
-      alert(`New User ${username} registered.`);
-      window.location.href = "index.html";
+      alert(`New User ${username} registered. Please login now.`);
+
+      // Refresh to login view instead of jumping to dashboard for security
+      window.location.reload();
     }
   } catch (error) {
     updateDevMonitor("❌ Registration Failed! Check Backend Logs.");
@@ -55,13 +56,16 @@ async function loginUser(email, password) {
       localStorage.setItem("authToken", data.token);
       localStorage.setItem("foodapp_user", data.username);
       updateDevMonitor(`✅ Welcome back ${data.username}! JWT Verified.`);
-      window.location.href = "index.html";
+
+      // 🔥 FIXED: Redirecting to dashboard.html instead of index.html
+      window.location.href = "dashboard.html";
     } else {
       alert("Invalid credentials!");
       updateDevMonitor("❌ Login Denied: Unauthorized.");
     }
   } catch (error) {
-    updateDevMonitor("❌ Backend Offline!");
+    console.error("Login Error:", error);
+    updateDevMonitor("❌ Backend Offline or Error!");
   }
 }
 
@@ -92,7 +96,7 @@ async function updateDevMonitor(eventMsg) {
   }
 }
 
-// Auto-check status every 15 seconds to keep ngrok alive
+// Auto-check status every 15 seconds to keep backend alive
 setInterval(() => updateDevMonitor(), 15000);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -104,4 +108,3 @@ document.addEventListener("DOMContentLoaded", () => {
     authForm.addEventListener("submit", handleAuth);
   }
 });
-// Sync Trigger: 20:45 PM
