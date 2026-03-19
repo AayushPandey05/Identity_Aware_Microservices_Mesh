@@ -36,9 +36,9 @@ void send_identity_and_event(const char* username, string jwt_token) {
     rd_kafka_conf_t *conf = rd_kafka_conf_new();
     rd_kafka_conf_set(conf, "bootstrap.servers", "foodapp-kafka-broker-lpu-e79e.k.aivencloud.com:21836", errstr, sizeof(errstr));
     rd_kafka_conf_set(conf, "security.protocol", "ssl", errstr, sizeof(errstr));
-    rd_kafka_conf_set(conf, "ssl.ca.location", "certificates/ca.pem", errstr, sizeof(errstr));
-    rd_kafka_conf_set(conf, "ssl.certificate.location", "certificates/service.cert", errstr, sizeof(errstr));
-    rd_kafka_conf_set(conf, "ssl.key.location", "certificates/service.key", errstr, sizeof(errstr));
+    rd_kafka_conf_set(conf, "ssl.ca.location", "/app/certificates/ca.pem", errstr, sizeof(errstr));
+    rd_kafka_conf_set(conf, "ssl.certificate.location", "/app/certificates/service.cert", errstr, sizeof(errstr));
+    rd_kafka_conf_set(conf, "ssl.key.location", "/app/certificates/service.key", errstr, sizeof(errstr));
 
     rd_kafka_t *rk = rd_kafka_new(RD_KAFKA_PRODUCER, conf, errstr, sizeof(errstr));
     if (!rk) return;
@@ -88,7 +88,7 @@ int main() {
 
         MYSQL* conn = mysql_init(NULL);
         if (mysql_real_connect(conn, get_env_var("DB_HOST", "db").c_str(), get_env_var("DB_USER", "root").c_str(), get_env_var("DB_PASS", "password").c_str(), "foodapp", 3306, NULL, 0)) {
-            string query = "INSERT INTO users (username, email, password_hash) VALUES ('" + username + "', '" + email + "', 'secure_hash')";
+            string query = "INSERT INTO users (username, email, password) VALUES ('" + username + "', '" + email + "', 'secure_hash')";
             if (!mysql_query(conn, query.c_str())) {
                 RedisManager::cacheUser(username, email);
                 string jwt_token = generate_auth_token(username, email);
