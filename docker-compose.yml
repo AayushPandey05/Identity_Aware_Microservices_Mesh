@@ -5,6 +5,7 @@ services:
   nginx_gateway:
     image: nginx:latest
     container_name: nginx_gateway
+    restart: always # <-- Added: Auto-heal logic
     ports:
       - "80:80"
     volumes:
@@ -18,17 +19,17 @@ services:
   user-service:
     build: ./foodapp-backend/user-service
     container_name: cpp_user_service
+    restart: always # <-- Added: Auto-heal logic
     ports:
       - "8080:8080"
     volumes:
       - .:/app
-      - ./certificates:/app/certificates # <--- Connects Mumbai folder to Container
+      - ./certificates:/app/certificates
     environment:
       - DB_HOST=db
       - DB_USER=root
       - DB_PASS=password
       - DB_NAME=foodapp
-      # Kafka Security Settings (Aiven Keys)
       - KAFKA_CA_PATH=/app/certificates/ca.pem
       - KAFKA_CERT_PATH=/app/certificates/service.cert
       - KAFKA_KEY_PATH=/app/certificates/service.key
@@ -41,6 +42,7 @@ services:
   db:
     image: mysql:8.0
     container_name: mysql_db
+    restart: always # <-- Added: Auto-heal logic
     ports:
       - "3306:3306"
     environment:
