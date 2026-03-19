@@ -3,6 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- IMPORTANT: Fix for Mixed Content (HTTP Backend on HTTPS Frontend) -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+
     <title>Welcome - Login & Sign Up</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,6 +43,7 @@
             <button class="toggle-btn" id="btn-signup">Sign Up</button>
           </div>
 
+          <!-- handleAuth will now redirect to home.html on success -->
           <form id="auth-form" class="auth-form" onsubmit="handleAuth(event)">
             <h2 id="form-title">Welcome Back</h2>
             <p class="subtitle" id="form-subtitle">
