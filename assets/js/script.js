@@ -1,4 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- AUTH GUARD: Redirect to login if not authenticated ---
+  const savedUser = localStorage.getItem("foodapp_user");
+  if (!savedUser) {
+    // Agar user logged in nahi hai, toh seedha index.html (Login) par bhej do
+    if (
+      !window.location.pathname.endsWith("index.html") &&
+      !window.location.pathname.endsWith("/")
+    ) {
+      window.location.href = "index.html";
+      return;
+    }
+  }
+
   const { categories, restaurants } = window.appData;
 
   // --- HTML Elements --- //
@@ -28,13 +41,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const liveSearchInput = document.getElementById("live-search-input");
   const searchResultsGrid = document.getElementById("search-results-grid");
 
+  const signupModalBtn = document.getElementById("open-signin-modal");
+  const closeAuthModalBtn = document.getElementById("close-modal-btn");
+  const authModal = document.getElementById("auth-modal");
+  const modalBackdrop = document.getElementById("modal-backdrop");
+  const form = document.getElementById("registration-form");
+  const submitBtn = document.getElementById("submit-btn");
+  const btnText = submitBtn ? submitBtn.querySelector(".btn-text") : null;
+  const spinner = submitBtn ? submitBtn.querySelector(".spinner") : null;
+  const toastContainer = document.getElementById("toast-container");
+
   // --- App State --- //
   let currentRestaurants = [...restaurants];
-  let cart = []; // Array of { id, name, price, qty, isVeg }
+  let cart = [];
   let currentOpenRestaurant = null;
 
   // --- HOME VIEW RENDER --- //
   function renderCarousel() {
+    if (!dynamicCarousel) return;
     dynamicCarousel.innerHTML = categories
       .map(
         (cat) => `
@@ -51,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     container = dynamicGrid,
     isSearch = false,
   ) {
+    if (!container) return;
     if (restaurantsArray.length === 0) {
       container.innerHTML = `<div>No restaurants found.</div>`;
       return;
@@ -81,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .join("");
 
-    // Routing Logic to Restaurant View
     const anchorCards = container.querySelectorAll(".swiggy-card");
     anchorCards.forEach((card) =>
       card.addEventListener("click", (e) => {
@@ -93,38 +117,38 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  filterContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("swiggy-pill")) {
-      const type = e.target.getAttribute("data-filter");
-      document
-        .querySelectorAll(".swiggy-pill")
-        .forEach((p) => (p.style.backgroundColor = "var(--bg-white)"));
-      e.target.style.backgroundColor = "var(--border-light)";
+  if (filterContainer) {
+    filterContainer.addEventListener("click", (e) => {
+      if (e.target.classList.contains("swiggy-pill")) {
+        const type = e.target.getAttribute("data-filter");
+        document
+          .querySelectorAll(".swiggy-pill")
+          .forEach((p) => (p.style.backgroundColor = "var(--bg-white)"));
+        e.target.style.backgroundColor = "var(--border-light)";
 
-      switch (type) {
-        case "rating":
-          currentRestaurants = restaurants.filter((r) => r.rating >= 4.0);
-          break;
-        case "veg":
-          currentRestaurants = restaurants.filter((r) => r.isVeg);
-          break;
-        case "fast":
-          currentRestaurants = restaurants.filter((r) => r.fastDelivery);
-          break;
-        default:
-          currentRestaurants = [...restaurants];
+        switch (type) {
+          case "rating":
+            currentRestaurants = restaurants.filter((r) => r.rating >= 4.0);
+            break;
+          case "veg":
+            currentRestaurants = restaurants.filter((r) => r.isVeg);
+            break;
+          case "fast":
+            currentRestaurants = restaurants.filter((r) => r.fastDelivery);
+            break;
+          default:
+            currentRestaurants = [...restaurants];
+        }
+        renderGrid(currentRestaurants);
       }
-      renderGrid(currentRestaurants);
-    }
-  });
+    });
+  }
 
-  // --- RESTAURANT DETAIL VIEW ROUTING --- //
   function openRestaurantView(resId) {
     const restaurant = restaurants.find((r) => r.id === resId);
     if (!restaurant) return;
     currentOpenRestaurant = restaurant;
 
-    // Render Header
     resInfoHeader.innerHTML = `
       <h1>${restaurant.name}</h1>
       <div class="res-rating-line">
@@ -136,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <p style="color: var(--text-secondary); margin-top:4px;">${restaurant.cuisines}</p>
     `;
 
-    // Render Menu Array
     menuContainer.innerHTML = restaurant.menu
       .map(
         (item) => `
@@ -155,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
       )
       .join("");
 
-    // Attach Cart Action
     menuContainer.querySelectorAll(".add-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         addToCart(
@@ -166,24 +188,28 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // View Toggle
     homeView.classList.add("hidden");
     restaurantView.classList.remove("hidden");
     window.scrollTo(0, 0);
   }
 
-  backToHomeBtn.addEventListener("click", () => {
-    restaurantView.classList.add("hidden");
-    homeView.classList.remove("hidden");
-    currentOpenRestaurant = null;
-  });
+  if (backToHomeBtn) {
+    backToHomeBtn.addEventListener("click", () => {
+      restaurantView.classList.add("hidden");
+      homeView.classList.remove("hidden");
+      currentOpenRestaurant = null;
+    });
+  }
 
-  // Nav Logo acts as home button
-  document.querySelector(".logo-box").addEventListener("click", () => {
-    restaurantView.classList.add("hidden");
-    homeView.classList.remove("hidden");
-    closeSearchOverlay();
-  });
+  const logoBox = document.querySelector(".logo-box");
+  if (logoBox) {
+    logoBox.addEventListener("click", () => {
+      restaurantView.classList.add("hidden");
+      homeView.classList.remove("hidden");
+      closeSearchOverlay();
+    });
+  }
+
   document.addEventListener("nav-home", () => {
     restaurantView.classList.add("hidden");
     homeView.classList.remove("hidden");
@@ -234,18 +260,17 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .join("");
 
-    cartCountElem.textContent = totalItems;
-    cartTotalPriceElem.textContent = `₹${totalPrice}`;
+    if (cartCountElem) cartCountElem.textContent = totalItems;
+    if (cartTotalPriceElem) cartTotalPriceElem.textContent = `₹${totalPrice}`;
 
     if (cart.length > 0) {
-      emptyCartState.classList.add("hidden");
-      cartFooter.classList.remove("hidden");
+      if (emptyCartState) emptyCartState.classList.add("hidden");
+      if (cartFooter) cartFooter.classList.remove("hidden");
     } else {
-      emptyCartState.classList.remove("hidden");
-      cartFooter.classList.add("hidden");
+      if (emptyCartState) emptyCartState.classList.remove("hidden");
+      if (cartFooter) cartFooter.classList.add("hidden");
     }
 
-    // Attach +/- listeners
     cartItemsContainer.querySelectorAll(".minus").forEach((btn) => {
       btn.addEventListener("click", (e) =>
         updateCartQuantity(e.target.getAttribute("data-id"), -1),
@@ -258,140 +283,145 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  checkoutBtn.addEventListener("click", () => {
-    showToast("success", "Processing order via simulated Kafka backend...");
-    setTimeout(() => {
-      cart = [];
-      updateCartUI();
-      closeCartOverlay();
-      showToast("success", "Order Placed Successfully! Generating Invoice.");
-    }, 1500);
-  });
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+      showToast("success", "Processing order via simulated Kafka backend...");
+      setTimeout(() => {
+        cart = [];
+        updateCartUI();
+        closeCartOverlay();
+        showToast("success", "Order Placed Successfully! Generating Invoice.");
+      }, 1500);
+    });
+  }
 
   // Cart Modal Toggles
   function openCartOverlay() {
-    cartSidebar.classList.add("active");
-    document.getElementById("modal-backdrop").classList.add("active");
+    if (cartSidebar) cartSidebar.classList.add("active");
+    if (modalBackdrop) modalBackdrop.classList.add("active");
     document.body.style.overflow = "hidden";
   }
   function closeCartOverlay() {
-    cartSidebar.classList.remove("active");
-    document.getElementById("modal-backdrop").classList.remove("active");
+    if (cartSidebar) cartSidebar.classList.remove("active");
+    if (modalBackdrop) modalBackdrop.classList.remove("active");
     document.body.style.overflow = "";
   }
-  openCartBtn.addEventListener("click", openCartOverlay);
-  closeCartBtn.addEventListener("click", closeCartOverlay);
+  if (openCartBtn) openCartBtn.addEventListener("click", openCartOverlay);
+  if (closeCartBtn) closeCartBtn.addEventListener("click", closeCartOverlay);
 
   // --- LIVE FAST SEARCH ENGINE --- //
   function openSearchOverlay() {
-    searchOverlay.classList.add("active");
+    if (searchOverlay) searchOverlay.classList.add("active");
     document.body.style.overflow = "hidden";
-    liveSearchInput.value = "";
-    searchResultsGrid.innerHTML = ""; // Start clean
-    liveSearchInput.focus();
+    if (liveSearchInput) {
+      liveSearchInput.value = "";
+      liveSearchInput.focus();
+    }
+    if (searchResultsGrid) searchResultsGrid.innerHTML = "";
   }
   function closeSearchOverlay() {
-    searchOverlay.classList.remove("active");
+    if (searchOverlay) searchOverlay.classList.remove("active");
     document.body.style.overflow = "";
   }
-  openSearchBtn.addEventListener("click", openSearchOverlay);
-  closeSearchBtn.addEventListener("click", closeSearchOverlay);
+  if (openSearchBtn) openSearchBtn.addEventListener("click", openSearchOverlay);
+  if (closeSearchBtn)
+    closeSearchBtn.addEventListener("click", closeSearchOverlay);
 
-  liveSearchInput.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    if (query.length === 0) {
-      searchResultsGrid.innerHTML = "";
-      return;
-    }
-
-    // Search against Restaurant Name OR Food Item Name inside menu
-    const matchingRes = restaurants.filter((r) => {
-      const matchName = r.name.toLowerCase().includes(query);
-      const matchCuisine = r.cuisines.toLowerCase().includes(query);
-      const matchMenu = r.menu.some((m) =>
-        m.name.toLowerCase().includes(query),
-      );
-      return matchName || matchCuisine || matchMenu;
+  if (liveSearchInput) {
+    liveSearchInput.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      if (query.length === 0) {
+        searchResultsGrid.innerHTML = "";
+        return;
+      }
+      const matchingRes = restaurants.filter((r) => {
+        const matchName = r.name.toLowerCase().includes(query);
+        const matchCuisine = r.cuisines.toLowerCase().includes(query);
+        const matchMenu = r.menu.some((m) =>
+          m.name.toLowerCase().includes(query),
+        );
+        return matchName || matchCuisine || matchMenu;
+      });
+      renderGrid(matchingRes, searchResultsGrid, true);
     });
+  }
 
-    renderGrid(matchingRes, searchResultsGrid, true);
-  });
-
-  // --- AUTH MODAL SYSTEM (Phase 4 Logic) --- //
-  const signupModalBtn = document.getElementById("open-signin-modal");
-  const closeAuthModalBtn = document.getElementById("close-modal-btn");
-  const authModal = document.getElementById("auth-modal");
-  const modalBackdrop = document.getElementById("modal-backdrop");
-  const form = document.getElementById("registration-form");
-  const submitBtn = document.getElementById("submit-btn");
-  const btnText = submitBtn.querySelector(".btn-text");
-  const spinner = submitBtn.querySelector(".spinner");
-
-  const toastContainer = document.getElementById("toast-container");
-
+  // --- AUTH SYSTEM UPDATED --- //
   function updateNavProfile(name) {
+    if (!signupModalBtn) return;
     const firstName = name.split(" ")[0];
+
+    // Change UI to Logout button
     signupModalBtn.innerHTML = `
       <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#3d4152"></path></svg>
       Logout (${firstName})
     `;
-    signupModalBtn.removeEventListener("click", openAuthModal);
-    signupModalBtn.addEventListener("click", () => {
+
+    // Remove default modal opener and add Logout logic
+    signupModalBtn.onclick = (e) => {
+      e.preventDefault();
       localStorage.removeItem("foodapp_user");
-      window.location.href = "login.html";
-    });
+      localStorage.removeItem("authToken"); // Clean up everything
+      window.location.href = "index.html"; // Redirect to new entry point
+    };
   }
 
-  const savedUser = localStorage.getItem("foodapp_user");
   if (savedUser) {
     updateNavProfile(savedUser);
+  } else {
+    if (signupModalBtn) signupModalBtn.onclick = openAuthModal;
   }
 
   function openAuthModal() {
-    authModal.classList.add("active");
-    modalBackdrop.classList.add("active");
+    if (authModal) authModal.classList.add("active");
+    if (modalBackdrop) modalBackdrop.classList.add("active");
     document.body.style.overflow = "hidden";
   }
 
   function closeAuthModal() {
-    authModal.classList.remove("active");
-    modalBackdrop.classList.remove("active");
+    if (authModal) authModal.classList.remove("active");
+    if (modalBackdrop) modalBackdrop.classList.remove("active");
     document.body.style.overflow = "";
   }
 
-  signupModalBtn.addEventListener("click", openAuthModal);
-  closeAuthModalBtn.addEventListener("click", closeAuthModal);
-  modalBackdrop.addEventListener("click", () => {
-    closeAuthModal();
-    closeCartOverlay();
-  });
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    submitBtn.disabled = true;
-    btnText.textContent = "CREATING ACCOUNT...";
-    spinner.classList.remove("hidden");
-
-    const fullnameInput = document.getElementById("fullname");
-    const fullname = fullnameInput ? fullnameInput.value : "User";
-
-    setTimeout(() => {
-      localStorage.setItem("foodapp_user", fullname);
-      updateNavProfile(fullname);
-      showToast(
-        "success",
-        `Welcome ${fullname}! JWT Verified. Account created successfully.`,
-      );
-
-      submitBtn.disabled = false;
-      btnText.textContent = "SIGN UP";
-      spinner.classList.add("hidden");
+  if (closeAuthModalBtn)
+    closeAuthModalBtn.addEventListener("click", closeAuthModal);
+  if (modalBackdrop) {
+    modalBackdrop.addEventListener("click", () => {
       closeAuthModal();
-      form.reset();
-    }, 1200);
-  });
+      closeCartOverlay();
+    });
+  }
+
+  if (form) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.textContent = "CREATING ACCOUNT...";
+      if (spinner) spinner.classList.remove("hidden");
+
+      const fullnameInput = document.getElementById("fullName");
+      const fullname = fullnameInput ? fullnameInput.value : "User";
+
+      setTimeout(() => {
+        localStorage.setItem("foodapp_user", fullname);
+        updateNavProfile(fullname);
+        showToast(
+          "success",
+          `Welcome ${fullname}! Account created successfully.`,
+        );
+
+        if (submitBtn) submitBtn.disabled = false;
+        if (btnText) btnText.textContent = "SIGN UP";
+        if (spinner) spinner.classList.add("hidden");
+        closeAuthModal();
+        form.reset();
+      }, 1200);
+    });
+  }
 
   function showToast(type, message) {
+    if (!toastContainer) return;
     const toast = document.createElement("div");
     toast.className = `toast ${type}`;
     toast.textContent = message;
