@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <!-- IMPORTANT: Fix for Mixed Content (HTTP Backend on HTTPS Frontend) -->
     <meta
       http-equiv="Content-Security-Policy"
       content="upgrade-insecure-requests"
     />
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Welcome - Login & Sign Up</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,7 +43,7 @@
             <button class="toggle-btn" id="btn-signup">Sign Up</button>
           </div>
 
-          <!-- handleAuth will now redirect to home.html on success -->
+          <!-- onsubmit handles the API call -->
           <form id="auth-form" class="auth-form" onsubmit="handleAuth(event)">
             <h2 id="form-title">Welcome Back</h2>
             <p class="subtitle" id="form-subtitle">
@@ -72,6 +72,7 @@
                 id="password"
                 required
                 placeholder="••••••••"
+                autocomplete="current-password"
               />
             </div>
 
@@ -86,11 +87,7 @@
           </div>
 
           <div class="social-login">
-            <button
-              onclick="loginSSO()"
-              class="social-btn google-btn"
-              type="button"
-            >
+            <button class="social-btn google-btn" type="button">
               <svg
                 viewBox="0 0 24 24"
                 width="20"
@@ -117,12 +114,7 @@
               Google
             </button>
 
-            <button
-              onclick="loginSSO()"
-              class="social-btn sso-btn"
-              type="button"
-              style="display: flex; gap: 8px; justify-content: center; align-items: center;"
-            >
+            <button class="social-btn sso-btn" type="button">
               Sign in with Okta/Auth0
             </button>
           </div>
@@ -150,6 +142,7 @@
 
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- Scripts -->
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/login.js"></script>

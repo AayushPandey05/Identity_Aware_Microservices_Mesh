@@ -1,20 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- IMPORTANT: Security Fix for Vercel/Mixed Content -->
+    <!-- IMPORTANT: Fix for Mixed Content (HTTP Backend on HTTPS Frontend) -->
     <meta
       http-equiv="Content-Security-Policy"
       content="upgrade-insecure-requests"
     />
-
-    <script>
-      // AUTH GUARD: Agar user logged in nahi hai, toh login page (index.html) par bhejo
-      if (!localStorage.getItem("token")) {
-         // window.location.href = "index.html";
-         // Note: Abhi ise comment rakh sakte ho jab tak testing kar rahe ho,
-         // par final deployment mein ise on kar dena.
-      }
-    </script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,6 +13,7 @@
       Order food online from India's best food delivery service. Order from
       restaurants near you
     </title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -100,7 +92,6 @@
                   fill="#3d4152"
                 ></path>
               </svg>
-              <!-- Name will be updated via assets/js/auth.js -->
               <span id="user-display-name">Sign In</span>
             </li>
             <li class="nav-item cart-item" id="open-cart-sidebar">
@@ -135,9 +126,7 @@
             </button>
           </div>
         </div>
-
         <div class="mind-carousel" id="dynamic-carousel"></div>
-
         <hr class="section-divider" />
       </section>
 
@@ -222,14 +211,12 @@
           />
         </div>
       </div>
-
       <div
         class="security-badge"
         style="background: #f4f9f4; color: #11823b; padding: 8px; font-size: 11px; margin-bottom: 15px; border-radius: 4px;"
       >
         ✅ JWT Status: Secured via HS256
       </div>
-
       <form id="registration-form" onsubmit="handleAuth(event)">
         <div class="form-group slide-input" id="group-name">
           <input type="text" id="fullName" placeholder="Full Name" />
@@ -264,7 +251,7 @@
       <div id="status-logs">
         <div style="margin-bottom: 4px;">
           📡 Connection:
-          <span id="ngrok-status" style="color: #00ff00;">CONNECTED</span>
+          <span id="ngrok-status" style="color: #ff0000;">OFFLINE</span>
         </div>
         <div style="margin-bottom: 4px;">
           🗄️ Database: <span style="color: #00ff00;">AWS RDS (MySQL)</span>
@@ -287,6 +274,7 @@
 
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- Correct Order of Scripts -->
     <script src="assets/js/data.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/script.js"></script>
