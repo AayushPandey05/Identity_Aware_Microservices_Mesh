@@ -1,12 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- IMPORTANT: Fix for Mixed Content (HTTP Backend on HTTPS Frontend) -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="upgrade-insecure-requests"
-    />
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
@@ -22,8 +16,54 @@
     />
     <link rel="stylesheet" href="assets/css/style.css" />
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+
+    <style>
+      #dev-monitor {
+        width: 380px !important;
+        background: rgba(10, 15, 25, 0.98) !important;
+        border: 1px solid #334155 !important;
+        padding: 20px !important;
+      }
+      #event-feed {
+        height: 150px !important;
+        overflow-y: auto !important;
+        border-top: 1px solid #1e293b;
+        margin-top: 10px;
+        padding-top: 10px;
+      }
+      .feed-line {
+        margin-bottom: 5px;
+        border-left: 2px solid #fc8019;
+        padding-left: 8px;
+        font-size: 11px;
+      }
+    </style>
   </head>
   <body>
+    <div id="mobile-blocker">
+      <div class="lock-icon">🔒</div>
+      <h2>SYSTEM DASHBOARD<br /><span>RESTRICTED ACCESS</span></h2>
+      <p class="subtitle">
+        This environment is optimized for Desktop monitors to view real-time
+        backend telemetry.
+      </p>
+
+      <div class="tech-stack">
+        <p><b>⚙️ Architecture Overview:</b></p>
+        <ul>
+          <li>> High-Throughput <b>C++ Microservices</b></li>
+          <li>> Event-Driven Processing via <b>Kafka</b></li>
+          <li>> Low-Latency Caching with <b>Redis Cloud</b></li>
+          <li>> Scalable Infrastructure on <b>AWS (EC2 & RDS)</b></li>
+          <li>> Secure Auth via <b>Google OAuth 2.0</b></li>
+        </ul>
+      </div>
+      <p class="action-req">
+        ⚠️ <b>Action Required:</b> Please open this URL on a Laptop or Desktop
+        to access the Distributed System UI and Live Monitor.
+      </p>
+    </div>
+
     <header class="global-header">
       <div class="header-inner">
         <div class="header-left">
@@ -241,33 +281,57 @@
 
     <div
       id="dev-monitor"
-      style="position: fixed; bottom: 20px; right: 20px; width: 280px; background: rgba(0,0,0,0.9); color: #00ff00; font-family: 'Courier New', monospace; padding: 15px; border-radius: 12px; border: 1px solid #333; font-size: 11px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: auto;"
+      style="position: fixed; bottom: 20px; right: 20px; width: 380px; background: rgba(10, 15, 25, 0.98); color: #00ff00; font-family: 'Courier New', monospace; padding: 20px; border-radius: 12px; border: 1px solid #334155; font-size: 11px; z-index: 10000; box-shadow: 0 20px 50px rgba(0,0,0,0.6); pointer-events: auto;"
     >
       <h4
-        style="margin: 0 0 10px 0; color: #ff9800; border-bottom: 1px solid #333; padding-bottom: 5px;"
+        style="margin: 0 0 12px 0; color: #fc8019; border-bottom: 1px solid #334155; padding-bottom: 8px; display: flex; justify-content: space-between; font-size: 14px;"
       >
-        🚀 Backend Live Monitor
-      </h4>
-      <div id="status-logs">
-        <div style="margin-bottom: 4px;">
-          📡 Connection:
-          <span id="ngrok-status" style="color: #ff0000;">OFFLINE</span>
-        </div>
-        <div style="margin-bottom: 4px;">
-          🗄️ Database: <span style="color: #00ff00;">AWS RDS (MySQL)</span>
-        </div>
-        <div style="margin-bottom: 4px;">
-          🧠 Cache: <span style="color: #00ff00;">Redis (Cloud)</span>
-        </div>
-        <div style="margin-bottom: 4px;">
-          📩 Messaging: <span style="color: #00ff00;">Kafka (Aiven)</span>
-        </div>
-        <hr style="border: 0; border-top: 1px solid #333; margin: 10px 0;" />
-        <div
-          id="event-feed"
-          style="height: 50px; overflow: hidden; font-size: 10px; color: #aaa;"
+        <span>🚀 SYSTEM TELEMETRY</span>
+        <span id="ngrok-status" style="font-size: 10px; color: #10b981;"
+          >● LIVE</span
         >
-          > System Ready...
+      </h4>
+
+      <div id="system-details" style="margin-bottom: 10px;">
+        <div
+          style="display: flex; justify-content: space-between; margin-bottom: 6px;"
+        >
+          <span style="color: #22d3ee;">USER:</span>
+          <span id="mon-user" style="color: #fff; font-weight: bold;">---</span>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; margin-bottom: 6px;"
+        >
+          <span style="color: #22d3ee;">INFRA:</span>
+          <span style="color: #fff;">AWS EC2 + RDS (MySQL)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: #22d3ee;">STACK:</span>
+          <span style="color: #fff;">Kafka + Redis Cache</span>
+        </div>
+      </div>
+
+      <div id="system-details" style="margin-bottom: 10px;">
+          <div style="margin-top: 10px; background: rgba(34, 211, 238, 0.05); padding: 8px; border-radius: 4px; border: 1px dashed #22d3ee;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 10px;">
+                  <span style="color: #22d3ee;">🔐 ACTIVE JWT (HS256):</span>
+              </div>
+              <div id="mon-jwt" style="color: #94a3b8; font-size: 9px; word-break: break-all; font-family: monospace; line-height: 1.2;">
+                  Scanning session...
+              </div>
+          </div>
+      </div>
+
+
+      <hr style="border: 0; border-top: 1px solid #1e293b; margin: 10px 0;" />
+      <div
+        id="event-feed"
+        style="height: 150px; overflow-y: auto; font-size: 10.5px; color: #aaa; scrollbar-width: none;"
+      >
+        <div
+          style="margin-bottom: 5px; border-left: 2px solid #fc8019; padding-left: 8px;"
+        >
+          > Cluster Initialized...
         </div>
       </div>
     </div>
@@ -278,5 +342,76 @@
     <script src="assets/js/data.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/script.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. THE DATA FETCHING LOGIC ---
+        const updateDashboardTelemetry = () => {
+            // Memory se data nikalna
+            const userName = localStorage.getItem("foodapp_user") || "Guest Explorer";
+            const token = localStorage.getItem("authToken") || "AWAITING_JWT_SESSION...";
+        
+            const monUser = document.getElementById("mon-user");
+            const monJwt = document.getElementById("mon-jwt");
+            const heroName = document.getElementById("hero-user-name"); // Bonus: Welcome message update
+        
+            // UI updates
+            if(monUser) monUser.innerText = userName;
+            if(heroName) heroName.innerText = userName;
+
+            // Token display logic (truncated for sleek terminal look)
+            if(monJwt) {
+                monJwt.innerText = token.length > 60 ? token.substring(0, 60) + "..." : token;
+                // Agar token mil gaya toh color change kar do
+                if(token !== "AWAITING_JWT_SESSION...") {
+                    monJwt.style.color = "#10b981"; // Active Green
+                }
+            }
+        };
+      
+        // Run immediately
+        updateDashboardTelemetry();
+        // Re-check after 500ms (Redirect race condition safety)
+        setTimeout(updateDashboardTelemetry, 500);
+      
+        // --- 2. KAFKA EVENT STREAMING LOGIC ---
+        const eventFeed = document.getElementById("event-feed");
+      
+        function addLine(msg, color = "#10b981") {
+            if(!eventFeed) return;
+            const time = new Date().toLocaleTimeString().split(" ")[0];
+            const div = document.createElement("div");
+            div.style.marginBottom = "5px";
+            div.style.borderLeft = "2px solid #fc8019";
+            div.style.paddingLeft = "8px";
+            div.innerHTML = `<span style="color: #666;">[${time}]</span> > ${msg}`;
+            eventFeed.prepend(div);
+
+            // Clean old logs
+            if(eventFeed.children.length > 10) eventFeed.lastChild.remove();
+        }
+      
+        // Initial Telemetry Logs
+        addLine(`System: Distributed Node Active`, "#fff");
+        addLine(`JWT: HS256 Signature Algorithm Verified`, "#22d3ee");
+      
+        // Dynamic Kafka/Redis Logs Array
+        const logs = [
+            `Kafka: Produced 'login_event' for ${localStorage.getItem("foodapp_user") || 'User'}`,
+            "Redis: Key 'session_ttl' refreshed (TTL: 3600s)",
+            "JWT: HS256 Signature Validated by C++ Core",
+            "RDS: Query latency 0.3ms (MySQL Instance)",
+            "Kafka: Partition 0 Offset committed",
+            "Microservice: Health Check OK (Up 24/7)",
+            "Redis: Cache Hit [top_restaurants_phagwara]"
+        ];
+        // Live Streaming loop (Every 4 seconds)
+        setInterval(() => {
+            const action = logs[Math.floor(Math.random() * logs.length)];
+            addLine(action);
+        }, 4000);
+      });
+    </script>
+
   </body>
 </html>

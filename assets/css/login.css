@@ -17,7 +17,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: var(--bg-color);
   color: var(--text-dark);
   overflow: hidden; /* Prevent scroll on login */
@@ -46,9 +46,15 @@ body {
 }
 
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .left-pane .animated-bg {
@@ -57,7 +63,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.1)" d="M0,100 C20,80 50,100 100,60 L100,100 Z"/></svg>') bottom/cover no-repeat;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.1)" d="M0,100 C20,80 50,100 100,60 L100,100 Z"/></svg>')
+    bottom/cover no-repeat;
   pointer-events: none;
 }
 
@@ -72,7 +79,7 @@ body {
   font-weight: 800;
   margin-bottom: 1rem;
   line-height: 1.2;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .brand {
@@ -139,8 +146,14 @@ body {
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Toggle Buttons */
@@ -170,7 +183,7 @@ body {
 .toggle-btn.active {
   color: var(--text-dark);
   background: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* Form Styles */
@@ -261,7 +274,7 @@ body {
 
 .divider::before,
 .divider::after {
-  content: '';
+  content: "";
   flex: 1;
   border-bottom: 1px solid var(--border-color);
 }
@@ -328,16 +341,26 @@ body {
   color: #fff;
   font-weight: 500;
   font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   animation: slideUpToast 0.3s ease forwards;
 }
 
-.toast.success { background: var(--success); }
-.toast.error { background: var(--error); }
+.toast.success {
+  background: var(--success);
+}
+.toast.error {
+  background: var(--error);
+}
 
 @keyframes slideUpToast {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .toast.fadeOut {
@@ -345,15 +368,21 @@ body {
 }
 
 @keyframes fadeOutToast {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(20px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
 /* Spinner */
 .spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255,255,255,0.3);
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   border-top-color: #fff;
   animation: spin 1s ease-in-out infinite;
@@ -361,7 +390,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .spinner.hidden {
@@ -371,8 +402,11 @@ body {
 /* Google Account Selection Modal */
 .modal-backdrop {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -384,7 +418,8 @@ body {
 }
 .google-modal {
   position: fixed;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -40%);
   background: #fff;
   border-radius: 12px;
@@ -394,7 +429,7 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 24px 0;
 }
 .google-modal.active {
@@ -436,7 +471,8 @@ body {
   padding-top: 16px;
 }
 .account-avatar {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #1a73e8;
   color: #fff;
@@ -447,9 +483,12 @@ body {
   font-size: 1.2rem;
   margin-right: 16px;
 }
-.account-avatar.jane { background: #e91e63; }
+.account-avatar.jane {
+  background: #e91e63;
+}
 .account-icon {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -479,14 +518,150 @@ body {
     flex: 0.4;
     padding: 2rem;
   }
-  .left-pane h1 { font-size: 2rem; }
-  .left-pane p { margin-bottom: 2rem; }
-  .glass-card { display: none; } /* Hide on small screens for space */
-  
+  .left-pane h1 {
+    font-size: 2rem;
+  }
+  .left-pane p {
+    margin-bottom: 2rem;
+  }
+  .glass-card {
+    display: none;
+  } /* Hide on small screens for space */
+
   .right-pane {
     flex: 1;
     border-radius: 30px 30px 0 0;
     margin-top: -30px; /* Overlap */
     z-index: 10;
+  }
+}
+
+/* --- Mobile Responsive Fix --- */
+@media (max-width: 768px) {
+  .split-layout {
+    flex-direction: column; /* Desktop par side-by-side tha, mobile par upar-niche */
+    height: auto;
+  }
+
+  .left-pane {
+    display: none; /* Mobile par badi image/branding ki zaroorat nahi, space bachao */
+  }
+
+  .right-pane {
+    padding: 2rem 1rem;
+    width: 100%;
+  }
+
+  .login-container {
+    max-width: 100%;
+    box-shadow: none; /* Clean look on mobile */
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+
+/* --- MOBILE BLOCKER CSS (BULLETPROOF FLEX) --- */
+#mobile-blocker {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* 1. Body ko scroll karne se roko */
+  body {
+    overflow: hidden !important;
+  }
+
+  /* 2. Swiggy wale design ko zinda gaad do (Hide completely) */
+  .split-layout,
+  .page-container,
+  .global-header {
+    display: none !important;
+  }
+
+  /* 3. Blocker ko poori screen par force karo */
+  #mobile-blocker {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: #0f172a !important;
+    color: #e2e8f0 !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 999999999 !important; /* Sabse upar */
+    padding: 30px !important;
+    box-sizing: border-box !important;
+    font-family: "Inter", system-ui, sans-serif !important;
+  }
+
+  #mobile-blocker .lock-icon {
+    font-size: 40px !important;
+    margin-bottom: 10px !important;
+  }
+  #mobile-blocker h2 {
+    color: #fc8019 !important;
+    font-size: 22px !important;
+    text-align: center !important;
+    margin-bottom: 15px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+  }
+  #mobile-blocker h2 span {
+    color: #ef4444 !important;
+    font-size: 15px !important;
+    display: block !important;
+    margin-top: 5px !important;
+  }
+  #mobile-blocker .subtitle {
+    font-size: 14px !important;
+    text-align: center !important;
+    color: #94a3b8 !important;
+    margin-bottom: 25px !important;
+  }
+
+  #mobile-blocker .tech-stack {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    width: 100% !important;
+    max-width: 350px !important;
+    margin-bottom: 25px !important;
+  }
+
+  #mobile-blocker .tech-stack p {
+    color: #10b981 !important;
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+  }
+  #mobile-blocker .tech-stack ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  #mobile-blocker .tech-stack ul li {
+    font-size: 13px !important;
+    margin-bottom: 10px !important;
+    color: #cbd5e1 !important;
+    font-family: "Courier New", Courier, monospace !important;
+    text-align: left !important;
+  }
+
+  #mobile-blocker .action-req {
+    font-size: 13px !important;
+    text-align: center !important;
+    color: #fcd34d !important;
+    line-height: 1.5 !important;
+    background: rgba(252, 211, 77, 0.1) !important;
+    padding: 15px !important;
+    border-radius: 6px !important;
+    border: 1px dashed #fcd34d !important;
   }
 }

@@ -936,21 +936,6 @@ body {
   }
 }
 
-@media (max-width: 768px) {
-  .nav-item {
-    font-size: 14px;
-  }
-  .nav-icon {
-    display: none;
-  }
-  .swiggy-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .auth-modal {
-    padding: 24px 20px;
-  }
-}
-
 @media (max-width: 480px) {
   .swiggy-grid {
     grid-template-columns: 1fr;
@@ -963,4 +948,199 @@ body {
   }
 }
 
-/* --- END OF AAYUSH'S ORIGINAL CODE --- */
+/* --- THE FINAL, UPDATED DASHBOARD MOBILE RESPONSIVE FIX --- */
+@media (max-width: 768px) {
+  /* 1. Header & Navbar Fix */
+  .global-header {
+    height: auto;
+    padding: 10px 0;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .nav-list {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    gap: 15px;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-item {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .nav-icon {
+    display: none;
+  }
+
+  /* 2. Grid Fix (2 columns on mobile) */
+  .swiggy-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .res-name {
+    font-size: 14px;
+  }
+
+  /* 3. MONITOR FIX (The 'Ghost' in the middle) */
+  .monitor-container {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 15px !important;
+    left: auto !important;
+    top: auto !important;
+    width: 170px !important;
+    font-size: 10px !important;
+    transform: scale(0.9);
+    z-index: 99999 !important;
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  /* 4. Hide branding on very small screens */
+  .location-box {
+    display: none;
+  }
+}
+
+/* --- MOBILE BLOCKER CSS --- */
+/* Desktop par isko chupa kar rakho */
+#mobile-blocker {
+  display: none;
+}
+
+/* Phone detect hote hi ye chalega */
+@media (max-width: 768px) {
+  #mobile-blocker {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #282c3f; /* Swiggy ka dark background */
+    color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999; /* Sabse upar */
+    text-align: center;
+    padding: 30px;
+    font-family: inherit;
+  }
+
+  #mobile-blocker h2 {
+    color: #fc8019; /* Swiggy Orange */
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+
+  #mobile-blocker p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: #d4d5d9;
+  }
+
+  /* Website ke baaki saare content ko hide kar do */
+  body > *:not(#mobile-blocker) {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   🚀 BACKEND TELEMETRY MONITOR (HACKER THEME)
+   ============================================================ */
+
+#dev-monitor {
+  width: 400px !important; /* Pehle se bada */
+  background: rgba(10, 15, 25, 0.98) !important;
+  border: 1px solid #334155 !important;
+  padding: 20px !important;
+  font-family: "Courier New", monospace !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.3s ease;
+}
+
+#dev-monitor h4 {
+  margin: 0 0 12px 0;
+  color: var(--swiggy-orange);
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 10px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding-bottom: 4px;
+}
+
+.label-cyan {
+  color: #22d3ee;
+  text-transform: uppercase;
+}
+.value-green {
+  color: #10b981;
+  font-weight: bold;
+}
+
+#event-feed {
+  height: 180px !important;
+  overflow-y: auto;
+  margin-top: 15px;
+  padding-top: 10px;
+  scrollbar-width: none; /* Firefox */
+}
+
+#event-feed::-webkit-scrollbar {
+  display: none;
+} /* Chrome/Safari */
+
+.feed-line {
+  font-size: 10.5px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  border-left: 2px solid var(--swiggy-orange);
+  padding-left: 10px;
+  animation: scanLine 0.4s ease-out;
+}
+
+@keyframes scanLine {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Status Pulse Animation */
+#ngrok-status.live-pulse {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
