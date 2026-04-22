@@ -1,0 +1,13 @@
+# 1. The Heavyweights (Never copy local dependencies)
+node_modules
+npm-debug.log
+
+# 2. The Secrets (NEVER bake keys into the blueprint)
+.env
+*.pem
+*.key
+
+# 3. Version Control (Waste of space)
+.git
+.gitignore
+README.md

@@ -168,6 +168,8 @@ async function updateDevMonitor(eventMsg) {
     if (healthCheck.ok) {
       status.innerText = "CONNECTED";
       status.style.color = "#00ff00";
+
+      
     } else {
       throw new Error();
     }
